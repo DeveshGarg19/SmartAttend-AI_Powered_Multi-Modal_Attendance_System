@@ -10,3 +10,6 @@ bcrypt    # for hashing passwords
 segno   # for generating QR codes
 pillow   # for image processing
 streamlit   # for creating web apps
+librosa  # for editing, loading of voice related files
+resemblyzer  # for making embeddings  but not working on my python version
+speechbrain  # alternative of above
