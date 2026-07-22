@@ -1,6 +1,7 @@
-numpy
-pandas
-scikit-learn
+streamlit   # for creating web apps
+numpy   # for array 
+pandas   # for data frame
+scikit-learn   # ML Models
 dlib-bin     # for determining face landmarks
 # python -m pip install dlib-20.0.99-cp313-cp313-win_amd64.whl
 git+https://github.com/ageitgey/face_recognition_models
@@ -9,7 +10,6 @@ supabase    # for connecting to supabase database
 bcrypt    # for hashing passwords
 segno   # for generating QR codes
 pillow   # for image processing
-streamlit   # for creating web apps
 librosa  # for editing, loading of voice related files
 resemblyzer  # for making embeddings  but not working on my python version
 speechbrain  # alternative of above
