@@ -1,14 +1,13 @@
 import dlib
-import numpy
+import numpy as np
 import face_recognition_models
 from sklearn.svm import SVC
 import streamlit as st
-import numpy as np
 from src.database.db import get_all_students
 
 
 @st.cache_resource
-def load_dlib_models():
+def load_dlib_models(): 
     detector = dlib.get_frontal_face_detector()
 
     sp = dlib.shape_predictor(
@@ -94,8 +93,8 @@ def predict_attendance(class_image_np):
         student_embedding = X_train[y_train.index(predicted_id)]
 
         best_match_score = np.linalg.norm(student_embedding - encoding)
-        resemblance_threshold = 0.6
-
+        resemblance_threshold = 0.45
+        # print('******************************',best_match_score,'*****************************')
         if best_match_score <= resemblance_threshold:
             detected_student[predicted_id] = True
 

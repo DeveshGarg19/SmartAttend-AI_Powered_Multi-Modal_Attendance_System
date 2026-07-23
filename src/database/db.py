@@ -28,6 +28,9 @@ def teacher_login(username, password):
             return teacher
     return None
 
+def get_teacher_name():
+    response = supabase.table('teachers').select("*").execute()
+    return response.data
 
 def get_all_students():
     response = supabase.table('students').select("*").execute()
@@ -89,4 +92,12 @@ def create_attendance(logs):
 
 def get_attendance_for_teacher(teacher_id):
     response = supabase.table('attendance_logs').select("*, subjects!inner(*)").eq('subjects.teacher_id', teacher_id).execute()
+    return response.data
+
+def update_student_face(student_id, embedding):
+    response = supabase.table("students").update({"face_embedding": embedding}).eq("student_id", student_id).execute()
+    return response.data
+
+def update_student_voice(student_id, embedding):
+    response = supabase.table("students").update({"voice_embedding": embedding}).eq("student_id", student_id).execute()
     return response.data
