@@ -1,6 +1,5 @@
 # 📸 SmartAttend - AI-Powered Multi-Modal Attendance System
 
-![SmartAttend Logo](https://i.ibb.co/YTYGn5qV/logo.png)
 
 > **SmartAttend** makes classroom attendance effortless, faster, and reliable using state-of-the-art **Face Recognition** and **Voice Speaker Identification** deep learning models.
 
