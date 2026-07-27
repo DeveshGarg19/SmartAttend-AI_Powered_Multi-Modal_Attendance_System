@@ -1,6 +1,7 @@
 import streamlit as st
 from src.database.db import update_student_voice
 from src.pipelines.voice_pipeline import get_voice_embedding
+import time
 
 
 @st.dialog("🎤 Update Voice")
@@ -11,10 +12,12 @@ def update_voice_dialog():
     audio = st.audio_input("Speak your attendance phrase",key="update_voice_audio")
     if audio:
         if st.button("Save Voice", type="primary"):
-            embedding = get_voice_embedding(audio.read())
-            update_student_voice(
-                student["student_id"],
-                embedding
-            )
-            st.success("Voice updated successfully!")
-            st.rerun()
+            with st.spinner('Updating Audio data'):
+                embedding = get_voice_embedding(audio.read())
+                update_student_voice(
+                    student["student_id"],
+                    embedding
+                )
+                st.success("Voice updated successfully!")
+                time.sleep(2)
+                st.rerun()

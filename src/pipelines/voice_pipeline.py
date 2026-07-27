@@ -5,7 +5,6 @@ import librosa
 import torch
 import streamlit as st
 import traceback
-import tempfile
 
 
 @st.cache_resource
@@ -19,12 +18,7 @@ def get_voice_embedding(audio_bytes):
     try:
         encoder = load_voice_encoder()
 
-        st.write(f"Audio bytes length: {len(audio_bytes)}")
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
-            tmp.write(audio_bytes)
-            temp_path = tmp.name
-
-        audio, sr = librosa.load(temp_path, sr=16000)
+        audio, sr = librosa.load(io.BytesIO(audio_bytes), sr=16000)
         waveform = torch.from_numpy(audio).float().unsqueeze(0)
 
         embedding = encoder.encode_batch(waveform)
@@ -40,17 +34,18 @@ def get_voice_embedding(audio_bytes):
         raise
     
 
-def identify_speaker(new_embedding, candidates_dict, threshold=0.65):
+def identify_speaker(new_embedding, candidates_dict, threshold=0.4):
     if new_embedding is None or not candidates_dict:
         return None, 0.0
     
     best_sid = None
-    best_score = -1.0
+    best_score = 0
 
     for sid, stored_embedding in candidates_dict.items():
         if stored_embedding is not None:
             stored_embedding = np.asarray(stored_embedding)
             similarity = np.dot(new_embedding, stored_embedding)
+            st.write(f"Student: {sid}, Similarity: {similarity:.4f}")
             if similarity> best_score:
                 best_score = similarity
                 best_sid = sid
@@ -61,16 +56,14 @@ def identify_speaker(new_embedding, candidates_dict, threshold=0.65):
     return None, best_score
 
 
-def process_bulk_audio(audio_bytes, candidates_dict, threshold=0.65):
+def process_bulk_audio(audio_bytes, candidates_dict, threshold=0.4):
 
     try:
         encoder = load_voice_encoder()
 
         audio, sr = librosa.load(io.BytesIO(audio_bytes), sr=16000)
         segments = librosa.effects.split(audio, top_db=30)
-
         identified_results = {}
-
 
         for start, end in segments:
 

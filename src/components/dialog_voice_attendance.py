@@ -1,25 +1,20 @@
 import streamlit as st
-
 from src.pipelines.voice_pipeline import process_bulk_audio
-
 from src.database.config import supabase
-
 import pandas as pd
-
-
 from src.components.dialog_attendance_results import show_attendance_result
 from datetime import datetime
+
+
 @st.dialog('Voice Attendance')
 def voice_attendance_dialog(selected_subject_id):
     st.write('Record audio of students saying I am present. Then AI will recognize the students')
-
-
     audio_data = None
-
     audio_data = st.audio_input("Record classroom audio")
 
     if st.button('Analyze Audio', width='stretch', type='primary'):
-        with st.spinner('Prcessing Audio data'):
+        st.session_state.pop("voice_attendance_results", None)
+        with st.spinner('Processing Audio data'):
             enrolled_res = supabase.table('subject_students').select("*, students(*)").eq('subject_id',selected_subject_id ).execute()
             enrolled_students = enrolled_res.data
 
@@ -56,7 +51,7 @@ def voice_attendance_dialog(selected_subject_id):
                 results.append({
                     "Name": student['name'],
                     "ID": student['student_id'],
-                    "Source": score if is_present else "-",
+                    "Voice Matched": score if is_present else "-",
                     "Status": "✅ Present" if is_present else "❌ Absent"
                 })
 
@@ -67,6 +62,7 @@ def voice_attendance_dialog(selected_subject_id):
                     'is_present': bool(is_present)
                 })
             st.session_state.voice_attendance_results = (pd.DataFrame(results), attendance_to_log)
+            # st.toast("")
 
     if st.session_state.get('voice_attendance_results'):
         st.divider()
