@@ -162,6 +162,3 @@ The application will open in your default browser at `http://localhost:8501`.
 
 ---
 
-## 📜 License
-
-This project is open source and available under the [MIT License](LICENSE).
