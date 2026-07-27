@@ -201,6 +201,7 @@ def teacher_tab_attendance_records():
     teacher_id = st.session_state.teacher_data['teacher_id']
     records = get_attendance_for_teacher(teacher_id)
     if not records:
+        st.write("No class taken")
         return
     data = []
     for r in records:
