@@ -28,17 +28,19 @@ def teacher_screen():
 
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
-    c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
+    c1, c2 = st.columns([2.2, 1], vertical_alignment='center', gap='medium')
     with c1:
         header_dashboard()
     with c2:
-        st.subheader(f"""Welcome, {teacher_data['name']} """)
-        if st.button("Logout", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
+        st.markdown(f"<div style='text-align: right; color: #475569; font-size: 1rem; margin-bottom: 0.35rem;'>Welcome, <b style='color: #5865F2;'>{teacher_data['name']}</b></div>", unsafe_allow_html=True)
+        if st.button("Logout", type='secondary', key='teacher_dashboard_logout', shortcut="control+backspace", use_container_width=True):
             st.session_state['is_logged_in'] = False
-            del st.session_state.teacher_data 
+            if 'teacher_data' in st.session_state:
+                del st.session_state.teacher_data 
             st.rerun()
 
-    st.space()
+    st.write("")
+
 
     if "current_teacher_tab" not in st.session_state:
         st.session_state.current_teacher_tab = 'take_attendance'
@@ -46,19 +48,19 @@ def teacher_dashboard():
 
     with tab1:
         type1 = "primary" if st.session_state.current_teacher_tab == 'take_attendance' else "tertiary"
-        if st.button('Take Attendance',type=type1, width='stretch', icon=':material/ar_on_you:'):
+        if st.button('Take Attendance', type=type1, use_container_width=True, icon=':material/ar_on_you:'):
             st.session_state.current_teacher_tab = 'take_attendance'
             st.rerun()
 
     with tab2:
         type2 = "primary" if st.session_state.current_teacher_tab == 'manage_subjects' else "tertiary"
-        if st.button('Manage Subjects', type=type2, width='stretch', icon=':material/book_ribbon:'):
+        if st.button('Manage Subjects', type=type2, use_container_width=True, icon=':material/book_ribbon:'):
             st.session_state.current_teacher_tab = 'manage_subjects'
             st.rerun()
 
     with tab3:
         type3 = "primary" if st.session_state.current_teacher_tab == 'attendance_records' else "tertiary"
-        if st.button('Attendance Records',type=type3, width='stretch', icon=':material/fact_check:'):
+        if st.button('Attendance Records', type=type3, use_container_width=True, icon=':material/fact_check:'):
             st.session_state.current_teacher_tab = 'attendance_records'
             st.rerun()
 
@@ -74,7 +76,7 @@ def teacher_dashboard():
 
 def teacher_tab_take_attendance():
     teacher_id = st.session_state.teacher_data['teacher_id']
-    st.header('Take AI Attendance')
+    st.markdown("<h2 style='margin-bottom: 1rem; color: #1E293B;'>Take AI Attendance</h2>", unsafe_allow_html=True)
 
     if 'attendance_images' not in st.session_state:
         st.session_state.attendance_images = []
@@ -87,13 +89,13 @@ def teacher_tab_take_attendance():
     
     subject_options = {f"{s['name']} - {s['subject_code']}": s['subject_id'] for s in subjects}
 
-    col1, col2 = st.columns([3,1], vertical_alignment='bottom')
+    col1, col2 = st.columns([3, 1], vertical_alignment='bottom')
 
     with col1:
         selected_subject_label = st.selectbox('Select Subject', options=list(subject_options.keys()))
 
     with col2:
-        if st.button('Add Photos', type='primary', icon=':material/photo_prints:', width='stretch'):
+        if st.button('Add Photos', type='primary', icon=':material/photo_prints:', use_container_width=True):
             add_photos_dialog()
 
     selected_subject_id = subject_options[selected_subject_label]
@@ -101,22 +103,24 @@ def teacher_tab_take_attendance():
     st.divider()
 
     if st.session_state.attendance_images:
-        st.header('Added Photos')
+        st.markdown("<h3 style='color: #1E293B; margin-bottom: 0.75rem;'>Added Photos</h3>", unsafe_allow_html=True)
         gallery_cols = st.columns(4)
 
         for idx, img in enumerate(st.session_state.attendance_images):
             with gallery_cols[idx % 4 ]:
-                st.image(img, width='stretch', caption=f'Photo {idx+1}')
+                st.image(img, use_container_width=True, caption=f'Photo {idx+1}')
     has_photos = bool(st.session_state.attendance_images)
     c1, c2, c3 = st.columns(3)
 
     with c1:
-        if st.button('Clear all photos', width='stretch', type='tertiary', icon=':material/delete:', disabled=not has_photos):
+        if st.button('Clear all photos', use_container_width=True, type='tertiary', icon=':material/delete:', disabled=not has_photos):
             st.session_state.attendance_images = []
+            st.session_state.added_file_ids = set()
             st.rerun()
 
+
     with c2:        
-        if st.button('Run Face Analysis', width='stretch', type='secondary', icon=':material/analytics:', disabled=not has_photos):
+        if st.button('Run Face Analysis', use_container_width=True, type='secondary', icon=':material/analytics:', disabled=not has_photos):
             with st.spinner('Deep scanning classroom photos...'):
                 all_detected_ids = {}
                 for idx, img in enumerate(st.session_state.attendance_images):
@@ -157,20 +161,21 @@ def teacher_tab_take_attendance():
                 attendance_result_dialog(pd.DataFrame(results), attendance_to_log)
     
     with c3:
-        if st.button('Use Voice Attendance', type='primary', width='stretch', icon=':material/mic:'):
+        if st.button('Use Voice Attendance', type='primary', use_container_width=True, icon=':material/mic:'):
             voice_attendance_dialog(selected_subject_id)
 
 
 def teacher_tab_manage_subjects():
     teacher_id = st.session_state.teacher_data['teacher_id']
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([2.5, 1], vertical_alignment='center')
     with col1:
-        st.header('Manage Subjects', width='stretch')
+        st.markdown("<h2 style='margin:0; color: #1E293B;'>Manage Subjects</h2>", unsafe_allow_html=True)
 
     with col2:
-        if st.button('Create New Subject', width='stretch'):
+        if st.button('Create New Subject', type='primary', icon=':material/add_circle:', use_container_width=True):
             create_subject_dialog(teacher_id)
 
+    st.write("")
 
     subjects = get_teacher_subjects(teacher_id)
     if subjects:
@@ -180,10 +185,9 @@ def teacher_tab_manage_subjects():
                 ("🕰️", "Classes", sub['total_classes']),
             ]
 
-            def share_btn():
-                if st.button(f"Share Code: {sub['name']}", key=f"share_{sub['subject_code']}", icon=":material/share:"):
+            def share_btn(sub=sub):
+                if st.button(f"Share Code: {sub['name']}", key=f"share_{sub['subject_code']}", icon=":material/share:", type="tertiary", use_container_width=True):
                     share_subject_dialog(sub['name'], sub['subject_code'])
-                st.space()
 
             subject_card(
                 name = sub['name'],
@@ -197,18 +201,18 @@ def teacher_tab_manage_subjects():
 
 
 def teacher_tab_attendance_records():
-    st.header('Attendance Records')
+    st.markdown("<h2 style='color: #1E293B;'>Attendance Records</h2>", unsafe_allow_html=True)
     teacher_id = st.session_state.teacher_data['teacher_id']
     records = get_attendance_for_teacher(teacher_id)
     if not records:
-        st.write("No class taken")
+        st.info("No class attendance taken yet")
         return
     data = []
     for r in records:
         ts = r.get('timestamp')
         data.append({
             "ts_group": ts.split(".")[0] if ts else None,
-            "Time": datetime.fromisoformat(ts).strftime("%Y-%m-%d %I:%M %p") if ts else "N'A",
+            "Time": datetime.fromisoformat(ts).strftime("%Y-%m-%d %I:%M %p") if ts else "N/A",
             "Subject": r['subjects']['name'],
             "Subject Code":r['subjects']['subject_code'],
             "is_present": bool(r.get('is_present', False))
@@ -231,7 +235,7 @@ def teacher_tab_attendance_records():
     display_df = (summary.sort_values(by='ts_group' ,ascending=False)
         [['Time', 'Subject', 'Subject Code', 'Attendance Stats']]
     )
-    st.dataframe(display_df, width='stretch', hide_index=True)
+    st.dataframe(display_df, use_container_width=True, hide_index=True)
 
 
 def login_teacher(username, password):
@@ -253,17 +257,16 @@ def get_name_of_teacher(username):
     return teacher['name']
 
 def teacher_screen_login():
-    c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
+    c1, c2 = st.columns([2.5, 1], vertical_alignment='center', gap='large')
     with c1:
         header_dashboard()
     with c2:
-        if st.button("Go back to Home", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
+        if st.button("Go back to Home", type='secondary', key='loginbackbtn', icon=':material/arrow_back:', shortcut="control+backspace", use_container_width=True):
             st.session_state['login_type'] = None
             st.rerun()
 
-    st.header('Login using password', text_alignment='center')
-    st.space()
-    st.space()
+    st.markdown("<h2 style='text-align: center; color: #1E293B; margin-top: 1rem;'>Teacher Login</h2>", unsafe_allow_html=True)
+    st.write("")
 
     teacher_username = st.text_input("Enter username", placeholder='ananyaroy')
     teacher_pass = st.text_input("Enter password", type='password', placeholder="Enter password")
@@ -271,19 +274,20 @@ def teacher_screen_login():
     btnc1, btnc2 = st.columns(2)
 
     with btnc1:
-        if st.button('Login', icon=':material/passkey:', shortcut='control+enter', width='stretch'):
+        if st.button('Login', type="primary", icon=':material/login:', shortcut='control+enter', use_container_width=True):
             if login_teacher(teacher_username, teacher_pass):
                 teacher_name = get_name_of_teacher(teacher_username)
-                st.toast(f"welcome back! {teacher_name}", icon="👋")
+                st.toast(f"Welcome back {teacher_name}!", icon="👋")
                 import time
                 time.sleep(1)
                 st.rerun()
             else:
-                st.error("Invalid username and password combo")
+                st.error("Invalid username and password combination")
 
     with btnc2:
-        if st.button('Register Instead', type="primary", icon=':material/passkey:', width='stretch'):
+        if st.button('Register Instead', type="tertiary", icon=':material/person_add:', use_container_width=True):
             st.session_state.teacher_login_type = 'register'
+            st.rerun()
 
 
 def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm):
@@ -296,24 +300,22 @@ def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_
     
     try:
         create_teacher(teacher_username, teacher_pass, teacher_name)
-        return True, "Sucessfully Created! Login Now"
+        return True, "Successfully Created! Login Now"
     except Exception as e:
         return False, "Unexpected Error!"
     
 
 def teacher_screen_register():
-    c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
+    c1, c2 = st.columns([2.5, 1], vertical_alignment='center', gap='large')
     with c1:
         header_dashboard()
     with c2:
-        if st.button("Go back to Home", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
+        if st.button("Go back to Home", type='secondary', key='loginbackbtn', icon=':material/arrow_back:', shortcut="control+backspace", use_container_width=True):
             st.session_state['login_type'] = None
             st.rerun()
 
-    st.header('Register your teacher profile')
-
-    st.space()
-    st.space()
+    st.markdown("<h2 style='text-align: center; color: #1E293B; margin-top: 1rem;'>Register Teacher Profile</h2>", unsafe_allow_html=True)
+    st.write("")
     
     teacher_username = st.text_input("Enter username", placeholder='ananyaroy')
 
@@ -328,17 +330,19 @@ def teacher_screen_register():
     btnc1, btnc2 = st.columns(2)
 
     with btnc1:
-        if st.button('Register now', icon=':material/passkey:', shortcut='control+enter', width='stretch'):
+        if st.button('Register now', type="primary", icon=':material/person_add:', shortcut='control+enter', use_container_width=True):
             success, message = register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm)
             if success:
                 st.success(message)
                 import time
-                time.sleep(2)
+                time.sleep(1.5)
                 st.session_state.teacher_login_type = "login"
                 st.rerun()
             else:
                 st.error(message)
 
     with btnc2:
-        if st.button('Login Instead', type="primary", icon=':material/passkey:', width='stretch'):
+        if st.button('Login Instead', type="tertiary", icon=':material/login:', use_container_width=True):
             st.session_state.teacher_login_type = 'login'
+            st.rerun()
+

@@ -15,29 +15,32 @@ from src.components.update_voice_dialog import update_voice_dialog
 def student_dashboard():
     student_data = st.session_state.student_data
     student_id = student_data['student_id']
-    c1, c2 = st.columns([2.5,1.2], vertical_alignment='top', gap='large')
+    c1, c2 = st.columns([1.5, 2], vertical_alignment='center', gap='small')
     with c1:
         header_dashboard()
     with c2:
-        st.subheader(f"Welcome, {student_data['name']}")
-        st.space()
-        if st.button("Update Face",icon=":material/face:",width="stretch",use_container_width=True,key="update_face",type='primary'):
-            update_face_dialog()
+        st.markdown(f"<div style='text-align: right; color: #475569; font-size: 1rem; margin-bottom: 0.35rem;'>Welcome, <b style='color: #5865F2;'>{student_data['name']}</b></div>", unsafe_allow_html=True)
+        btnc1, btnc2, btnc3 = st.columns([1.5, 1.1, 1.1])
+        with btnc1:
+            if st.button("Logout", type='secondary', key='student_logout', shortcut="control+backspace", use_container_width=True):
+                st.session_state.clear()
+                st.rerun()
+        with btnc2:
+            if st.button("Update Face", icon=":material/face:", use_container_width=True, key="update_face", type='primary'):
+                update_face_dialog()
+        with btnc3:
+            if st.button("Update Voice", icon=":material/mic:", use_container_width=True, key="update_voice", type='primary'):
+                update_voice_dialog()
 
-        if st.button("Update Voice",icon=":material/mic:",width="stretch",use_container_width=True,key="update_voice",type='primary'):
-            update_voice_dialog()
 
-        if st.button("Logout",type="secondary",width="stretch",use_container_width=True,shortcut="control+backspace"):
-            st.session_state.clear()
-            st.rerun()
-            
-    st.space()
 
-    c1, c2 =st.columns(2)
+    st.write("")
+
+    c1, c2 = st.columns([2.5, 1], vertical_alignment='center')
     with c1:
-        st.header('Your Enrolled Subjects')
+        st.markdown("<h2 style='margin:0; color: #1E293B;'>Your Enrolled Subjects</h2>", unsafe_allow_html=True)
     with c2:
-        if st.button('Enroll in Subject', type='primary', width='stretch'):
+        if st.button('Enroll in Subject', type='primary', icon=':material/add_circle:', use_container_width=True):
             enroll_dialog()
 
     st.divider()
@@ -68,10 +71,10 @@ def student_dashboard():
         stats = stats_map.get(sid,{"total":0, "attended": 0} )
         def unenroll_button(sid=sid, sub_name=sub["name"]):
             if st.button(
-                "Unenroll from this course",
+                "Unenroll from course",
                 key=f"unenroll_{sid}",
                 type="tertiary",
-                width="stretch",
+                use_container_width=True,
                 icon=":material/delete_forever:",
             ):
                 unenroll_student_to_subject(student_id, sid)
@@ -98,17 +101,16 @@ def student_screen():
         student_dashboard()
         return
     
-    c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
+    c1, c2 = st.columns([2.5, 1], vertical_alignment='center', gap='large')
     with c1:
         header_dashboard()
     with c2:
-        if st.button("Go back to Home", type='secondary', key='loginbackbtn', shortcut="control+backspace"):
+        if st.button("Go back to Home", type='secondary', key='loginbackbtn', icon=':material/arrow_back:', shortcut="control+backspace", use_container_width=True):
             st.session_state['login_type'] = None
             st.rerun()
 
-    st.header('Login using FaceID', text_alignment='center')
-    st.space()
-    st.space()
+    st.markdown("<h2 style='text-align: center; color: #1E293B; margin-top: 1rem;'>Login using FaceID</h2>", unsafe_allow_html=True)
+    st.write("")
     
     show_registration = False
     photo_source = st.camera_input("Position your face in the center")
@@ -132,7 +134,7 @@ def student_screen():
                         st.session_state.is_logged_in = True
                         st.session_state.user_role = 'student'
                         st.session_state.student_data = student
-                        st.toast(f'Welcome Back {student['name']}')
+                        st.toast(f"Welcome Back {student['name']}!")
                         time.sleep(1)
                         st.rerun()
                 else:
@@ -141,20 +143,20 @@ def student_screen():
 
     if show_registration:
         with st.container(border=True):
-            st.header('Register new Profile')
+            st.markdown("<h2 style='color: #1E293B;'>Register New Profile</h2>", unsafe_allow_html=True)
             new_name = st.text_input("Enter your name", placeholder='E.g. Aakash Sharma')
 
-            st.subheader('Optional : Voice Enrollment')
-            st.info("Enroll your for voice only attendance")
+            st.markdown("<h3 style='color: #475569; margin-top: 1rem;'>Optional : Voice Enrollment</h3>", unsafe_allow_html=True)
+            st.info("Enroll your voice for voice-only attendance")
 
             audio_data = None
 
             try:
-                audio_data = st.audio_input('Record a short phrase like I am present, My name is Aakash.')
+                audio_data = st.audio_input('Record a short phrase like "I am present, My name is Aakash."')
             except Exception:
                 st.error('Audio Data failed!')
 
-            if st.button('Create Account', type='primary'):
+            if st.button('Create Account', type='primary', icon=':material/how_to_reg:', use_container_width=True):
                 if new_name:
                     with st.spinner('Creating profile..'):
                         img = np.array(Image.open(photo_source))
@@ -177,4 +179,5 @@ def student_screen():
                             st.error('Couldnt capture your facial features for registration')
                 else:
                     st.warning('Please enter your name!')
+
                     

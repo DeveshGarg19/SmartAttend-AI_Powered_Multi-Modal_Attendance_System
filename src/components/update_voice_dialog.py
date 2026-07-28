@@ -11,7 +11,8 @@ def update_voice_dialog():
 
     audio = st.audio_input("Speak your attendance phrase",key="update_voice_audio")
     if audio:
-        if st.button("Save Voice", type="primary"):
+        if st.button("Save Voice", type="primary", icon=":material/save:", use_container_width=True):
+
             with st.spinner('Updating Audio data'):
                 embedding = get_voice_embedding(audio.read())
                 update_student_voice(

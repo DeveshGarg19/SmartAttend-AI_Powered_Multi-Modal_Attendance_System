@@ -18,7 +18,8 @@ def update_face_dialog():
         key="update_face_camera"
     )
     if photo:
-        if st.button("Save Face", type="primary"):
+        if st.button("Save Face", type="primary", icon=":material/save:", use_container_width=True):
+
             img = np.array(Image.open(photo))
             encodings = get_face_embeddings(img)
             if len(encodings) != 1:
