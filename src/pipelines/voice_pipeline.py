@@ -45,7 +45,7 @@ def identify_speaker(new_embedding, candidates_dict, threshold=0.4):
         if stored_embedding is not None:
             stored_embedding = np.asarray(stored_embedding)
             similarity = np.dot(new_embedding, stored_embedding)
-            st.write(f"Student: {sid}, Similarity: {similarity:.4f}")
+            # st.write(f"Student: {sid}, Similarity: {similarity:.4f}")
             if similarity> best_score:
                 best_score = similarity
                 best_sid = sid
