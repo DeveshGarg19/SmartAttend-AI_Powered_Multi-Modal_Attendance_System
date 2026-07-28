@@ -9,6 +9,7 @@
 ## 📌 Overview
 
 Traditional manual attendance systems are time-consuming and prone to proxy errors. **SmartAttend** automates attendance taking using multi-modal AI pipelines:
+
 1. **Face Recognition**: Detects and identifies multiple students simultaneously from classroom photographs.
 2. **Voice Speaker Identification**: Identifies speakers from recorded audio or bulk roll-call sound clips using speaker embedding similarity.
 
@@ -19,12 +20,14 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
 ## ✨ Key Features
 
 ### 👨‍🏫 Teacher Portal
+
 - **Subject & Section Management**: Create and manage multiple classes with unique join codes and shareable QR codes.
 - **AI Face Attendance**: Upload a classroom photo to detect, recognize, and mark attendance for multiple enrolled students in seconds.
 - **AI Voice Attendance**: Upload class audio clips or bulk speech files to identify active speakers and mark attendance.
 - **Attendance Insights**: View detailed attendance logs, session counts, and student participation stats.
 
 ### 🎓 Student Portal
+
 - **Instant Class Enrollment**: Join courses seamlessly via subject join codes, shareable links, or scanned QR codes.
 - **Biometric Profile Setup**: Upload photo samples and voice recordings to generate personalized facial (128D) and voice embeddings.
 - **Personal Dashboard**: Track subject-wise attendance history and percentage metrics in real time.
@@ -51,7 +54,6 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
 
 ## 📂 Project Structure
 
-```
 Attendance_Project/
 ├── app.py                         # Application entry point & screen routing
 ├── requirements.txt               # Dependencies list
@@ -81,13 +83,13 @@ Attendance_Project/
     │   └── teacher_screen.py      # Teacher dashboard & attendance control panel
     └── ui/
         └── base_layout.py         # Common layout wrapper & navigation styling
-```
 
 ---
 
 ## 🗄️ Database Schema (Supabase)
 
 SmartAttend relies on 5 main tables in Supabase:
+
 - **`teachers`**: `id`, `username`, `password` (hashed), `name`
 - **`students`**: `student_id`, `name`, `face_embedding` (float vector), `voice_embedding` (float vector)
 - **`subjects`**: `subject_id`, `subject_code`, `name`, `section`, `teacher_id`
@@ -99,16 +101,19 @@ SmartAttend relies on 5 main tables in Supabase:
 ## ⚙️ Installation & Setup
 
 ### 1. Prerequisites
+
 - Python 3.10+ (Recommended: Python 3.10 – 3.12)
 - C++ Build Tools (Required for `dlib` compilation on Windows if pre-built wheel is not used)
 
 ### 2. Clone the Repository
+
 ```bash
 git clone https://github.com/DeveshGarg19/SmartAttend-AI_Powered_Multi-Modal_Attendance_System.git
 cd SmartAttend-AI_Powered_Multi-Modal_Attendance_System
 ```
 
 ### 3. Create a Virtual Environment
+
 ```bash
 python -m venv venv
 # On Windows:
@@ -118,17 +123,20 @@ source venv/bin/activate
 ```
 
 ### 4. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 > **Note on `dlib` installation**:
 > If installation of `dlib` fails, you can install a pre-compiled wheel appropriate for your Python version:
+>
 > ```bash
 > pip install dlib-20.0.99-cp313-cp313-win_amd64.whl
 > ```
 
 ### 5. Configure Supabase Secrets
+
 Create or update `.streamlit/secrets.toml` with your Supabase credentials:
 
 ```toml
