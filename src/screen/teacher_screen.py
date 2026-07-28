@@ -2,7 +2,7 @@ import streamlit as st
 from src.ui.base_layout import style_background_dashboard, style_base_layout
 from src.components.header import header_dashboard
 from src.components.subject_card import subject_card
-from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects, get_attendance_for_teacher, get_teacher_name
+from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects, get_attendance_for_teacher, get_teacher_name, get_enrolled_students, unenroll_student_to_subject
 from src.components.dialog_create_subject import create_subject_dialog
 from src.components.dialog_share_subject import share_subject_dialog
 from src.components.dialog_add_photo import add_photos_dialog
@@ -13,6 +13,8 @@ from datetime import datetime
 import pandas as pd
 from src.database.config import supabase
 from src.components.dialog_voice_attendance import voice_attendance_dialog
+from src.components.dialog_enrolled_students import enrolled_students_dialog
+from src.components.dialog_manual_attendance import manual_attendance_dialog
 
 
 def teacher_screen():
@@ -44,7 +46,7 @@ def teacher_dashboard():
 
     if "current_teacher_tab" not in st.session_state:
         st.session_state.current_teacher_tab = 'take_attendance'
-    tab1, tab2, tab3 = st.columns(3)
+    tab1, tab2, tab3, tab4 = st.columns(4)
 
     with tab1:
         type1 = "primary" if st.session_state.current_teacher_tab == 'take_attendance' else "tertiary"
@@ -59,8 +61,14 @@ def teacher_dashboard():
             st.rerun()
 
     with tab3:
-        type3 = "primary" if st.session_state.current_teacher_tab == 'attendance_records' else "tertiary"
-        if st.button('Attendance Records', type=type3, use_container_width=True, icon=':material/fact_check:'):
+        type3 = "primary" if st.session_state.current_teacher_tab == 'enrolled_students' else "tertiary"
+        if st.button('Enrolled Students', type=type3, use_container_width=True, icon=':material/group:'):
+            st.session_state.current_teacher_tab = 'enrolled_students'
+            st.rerun()
+
+    with tab4:
+        type4 = "primary" if st.session_state.current_teacher_tab == 'attendance_records' else "tertiary"
+        if st.button('Attendance Records', type=type4, use_container_width=True, icon=':material/fact_check:'):
             st.session_state.current_teacher_tab = 'attendance_records'
             st.rerun()
 
@@ -70,8 +78,13 @@ def teacher_dashboard():
         teacher_tab_take_attendance()
     if st.session_state.current_teacher_tab == "manage_subjects":
         teacher_tab_manage_subjects()
+    if st.session_state.current_teacher_tab == "enrolled_students":
+        teacher_tab_enrolled_students()
     if st.session_state.current_teacher_tab == "attendance_records":
         teacher_tab_attendance_records()
+
+
+
 
 
 def teacher_tab_take_attendance():
@@ -185,20 +198,47 @@ def teacher_tab_manage_subjects():
                 ("🕰️", "Classes", sub['total_classes']),
             ]
 
-            def share_btn(sub=sub):
-                if st.button(f"Share Code: {sub['name']}", key=f"share_{sub['subject_code']}", icon=":material/share:", type="tertiary", use_container_width=True):
-                    share_subject_dialog(sub['name'], sub['subject_code'])
+            def subject_card_actions(sub=sub):
+                btn_c1, btn_c2 = st.columns(2)
+                with btn_c1:
+                    if st.button(f"Share Code", key=f"share_{sub['subject_code']}", icon=":material/share:", type="tertiary", use_container_width=True):
+                        share_subject_dialog(sub['name'], sub['subject_code'])
+                with btn_c2:
+                    if st.button(f"View Students ({sub['total_students']})", key=f"view_stu_{sub['subject_code']}", icon=":material/group:", type="secondary", use_container_width=True):
+                        enrolled_students_dialog(sub['subject_id'], sub['name'], sub['subject_code'])
 
             subject_card(
                 name = sub['name'],
                 code = sub['subject_code'],
                 section = sub['section'],
                 stats=stats,
-                footer_callback=share_btn
+                footer_callback=subject_card_actions
             )
     else:
         st.info("NO SUBJECTS FOUND. CREATE ONE ABOVE")
 
+
+def teacher_tab_enrolled_students():
+    teacher_id = st.session_state.teacher_data['teacher_id']
+    st.markdown("<h2 style='margin-bottom: 1rem; color: #1E293B;'>Enrolled Students</h2>", unsafe_allow_html=True)
+
+    subjects = get_teacher_subjects(teacher_id)
+    if not subjects:
+        st.info("No subjects found. Please create a subject first!")
+        return
+
+    subject_options = {f"{s['name']} ({s['subject_code']}) - Section {s['section']}": s for s in subjects}
+
+    col_sel, col_act = st.columns([2.5, 1], vertical_alignment='bottom')
+    with col_sel:
+        selected_label = st.selectbox("Select Subject", options=list(subject_options.keys()), key="enrolled_tab_subj_select")
+
+    selected_sub = subject_options[selected_label]
+    subject_id = selected_sub['subject_id']
+
+    with col_act:
+        if st.button("Mark Attendance", type="primary", icon=":material/edit_square:", use_container_width=True, key="enrolled_tab_mark_att_btn"):
+            manual_attendance_dialog(subject_id, selected_sub['name'])
 
 def teacher_tab_attendance_records():
     st.markdown("<h2 style='color: #1E293B;'>Attendance Records</h2>", unsafe_allow_html=True)

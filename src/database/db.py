@@ -101,3 +101,7 @@ def update_student_face(student_id, embedding):
 def update_student_voice(student_id, embedding):
     response = supabase.table("students").update({"voice_embedding": embedding}).eq("student_id", student_id).execute()
     return response.data
+
+def get_enrolled_students(subject_id):
+    response = supabase.table('subject_students').select("*, students(*)").eq('subject_id', subject_id).execute()
+    return response.data
