@@ -21,6 +21,8 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
 ### 👨‍🏫 Teacher Portal
 
 - **Subject & Section Management**: Create and manage multiple classes with unique join codes and shareable QR codes.
+- **Enrolled Student Management**: View all enrolled students in any subject, inspect face & voice registration status badges, search by student name/ID, and safely unenroll students with confirmation.
+- **Explicit Manual Attendance**: Manually mark and record attendance for enrolled students with session date/time selection and quick batch toggle controls.
 - **AI Face Attendance**: Upload a classroom photo to detect, recognize, and mark attendance for multiple enrolled students in seconds.
 - **AI Voice Attendance**: Upload class audio clips or bulk speech files to identify active speakers and mark attendance.
 - **Attendance Insights**: View detailed attendance logs, session counts, and student participation stats.
@@ -66,6 +68,8 @@ Attendance_Project/
     │   ├── dialog_auto_enroll.py  # Link-based course auto-enrollment
     │   ├── dialog_create_subject.py
     │   ├── dialog_enroll.py
+    │   ├── dialog_enrolled_students.py # View & manage enrolled students
+    │   ├── dialog_manual_attendance.py # Explicit manual attendance dialog
     │   ├── dialog_share_subject.py# QR code sharing dialog
     │   ├── dialog_voice_attendance.py
     │   ├── header.py
