@@ -50,7 +50,7 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
   - `segno`: Dynamic QR code generation for course sharing
 
 ---
-
+```
 ## 📂 Project Structure
 
 Attendance_Project/
@@ -84,6 +84,7 @@ Attendance_Project/
         └── base_layout.py         # Common layout wrapper & navigation styling
 
 ---
+```
 
 ## 🗄️ Database Schema (Supabase)
 
