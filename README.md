@@ -1,7 +1,12 @@
 # 📸 SmartAttend - AI-Powered Multi-Modal Attendance System
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://smartattendai.streamlit.app)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Database](https://img.shields.io/badge/Database-Supabase-emerald.svg)](https://supabase.com/)
 
 > **SmartAttend** makes classroom attendance effortless, faster, and reliable using state-of-the-art **Face Recognition** and **Voice Speaker Identification** deep learning models.
+
+🌐 **Live Web Application**: [https://smartattendai.streamlit.app](https://smartattendai.streamlit.app)
 
 ---
 
@@ -13,6 +18,14 @@ Traditional manual attendance systems are time-consuming and prone to proxy erro
 2. **Voice Speaker Identification**: Identifies speakers from recorded audio or bulk roll-call sound clips using speaker embedding similarity.
 
 Built with **Streamlit** for a responsive user interface and backed by **Supabase** for secure real-time data persistence.
+
+---
+
+## 🚀 Live Demo
+
+Access the live application directly in your browser without local installation:
+
+👉 **[Launch SmartAttend AI](https://smartattendai.streamlit.app)**
 
 ---
 
@@ -38,6 +51,7 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
 ## 🛠️ Tech Stack
 
 - **Frontend & Web Framework**: [Streamlit](https://streamlit.io/)
+- **Deployment Platform**: [Streamlit Community Cloud](https://streamlit.io/cloud)
 - **Backend Database**: [Supabase](https://supabase.com/) (PostgreSQL cloud database)
 - **Face Processing Pipeline**:
   - `dlib`: Frontal face detector & 68-point shape predictor
@@ -52,9 +66,10 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
   - `segno`: Dynamic QR code generation for course sharing
 
 ---
-```
+
 ## 📂 Project Structure
 
+```
 Attendance_Project/
 ├── app.py                         # Application entry point & screen routing
 ├── requirements.txt               # Dependencies list
@@ -86,9 +101,9 @@ Attendance_Project/
     │   └── teacher_screen.py      # Teacher dashboard & attendance control panel
     └── ui/
         └── base_layout.py         # Common layout wrapper & navigation styling
+```
 
 ---
-```
 
 ## 🗄️ Database Schema (Supabase)
 
@@ -98,11 +113,11 @@ SmartAttend relies on 5 main tables in Supabase:
 - **`students`**: `student_id`, `name`, `face_embedding` (float vector), `voice_embedding` (float vector)
 - **`subjects`**: `subject_id`, `subject_code`, `name`, `section`, `teacher_id`
 - **`subject_students`**: `id`, `subject_id`, `student_id`
-- **`attendance_logs`**: `id`, `subject_id`, `student_id`, `timestamp`, `status`
+- **`attendance_logs`**: `id`, `subject_id`, `timestamp`, `student_id`, `status`
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Local Installation & Setup
 
 ### 1. Prerequisites
 
@@ -150,7 +165,7 @@ SUPABASE_KEY = "your-supabase-anon-key"
 
 ---
 
-## 🚀 Running the Application
+## 🚀 Running Locally
 
 Launch the Streamlit web app:
 
@@ -162,16 +177,21 @@ The application will open in your default browser at `http://localhost:8501`.
 
 ---
 
+## 🌐 Streamlit Cloud Deployment
+
+This app is deployed on **Streamlit Community Cloud**:
+- **Live URL**: [https://smartattendai.streamlit.app](https://smartattendai.streamlit.app)
+- **Deployment Configuration**: Set `SUPABASE_URL` and `SUPABASE_KEY` under Streamlit Cloud **App Settings -> Secrets**.
+
+---
+
 ## 💡 How to Use
 
 1. **Register / Log In**: Choose whether you are a **Teacher** or a **Student**.
 2. **Student Onboarding**:
    - Students register and navigate to their profile to capture/upload a face photo and record a voice sample.
-   - Join subjects using a shared join code or direct URL link (`http://localhost:8501/?join-code=<CODE>`).
+   - Join subjects using a shared join code or direct URL link (`https://smartattendai.streamlit.app/?join-code=<CODE>`).
 3. **Teacher Workflow**:
    - Create a subject to generate a join code & QR code for class distribution.
    - Click **Take Attendance** -> Select **Face Attendance** (upload group photo) or **Voice Attendance** (upload audio).
    - Review detected students and confirm attendance submission.
-
----
-
