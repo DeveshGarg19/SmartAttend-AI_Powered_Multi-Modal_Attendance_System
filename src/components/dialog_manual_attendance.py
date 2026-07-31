@@ -18,8 +18,10 @@ def manual_attendance_dialog(subject_id, subject_name):
     students = [node['students'] for node in enrolled_nodes if node.get('students')]
     students = sorted(students, key=lambda s: s['name'].lower())
 
-    attendance_date = st.date_input("Attendance Date", value=datetime.now().date())
-    attendance_time = st.time_input("Attendance Time", value=datetime.now().time())
+    if "attendance_time" not in st.session_state:
+        st.session_state.attendance_time = datetime.now().time()
+    attendance_date = st.date_input("Attendance Date", value=datetime.now().date(), max_value=datetime.today())
+    attendance_time = st.time_input("Attendance Time", key="attendance_time")
     
     dt_str = datetime.combine(attendance_date, attendance_time).strftime("%Y-%m-%dT%H:%M:%S")
 
