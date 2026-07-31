@@ -6,7 +6,7 @@
 
 > **SmartAttend** makes classroom attendance effortless, faster, and reliable using state-of-the-art **Face Recognition** and **Voice Speaker Identification** deep learning models.
 
-🌐 **Live Web Application**: [https://smartattendai.streamlit.app](https://smartattendai.streamlit.app)
+🌐 **Live Web Application**: [https://smartattendaihome.vercel.app/](https://smartattendaihome.vercel.app/)
 
 ---
 
@@ -25,7 +25,7 @@ Built with **Streamlit** for a responsive user interface and backed by **Supabas
 
 Access the live application directly in your browser without local installation:
 
-👉 **[Launch SmartAttend AI](https://smartattendai.streamlit.app)**
+👉 **[Launch SmartAttend AI](https://smartattendaihome.vercel.app/)**
 
 ---
 
@@ -180,7 +180,7 @@ The application will open in your default browser at `http://localhost:8501`.
 ## 🌐 Streamlit Cloud Deployment
 
 This app is deployed on **Streamlit Community Cloud**:
-- **Live URL**: [https://smartattendai.streamlit.app](https://smartattendai.streamlit.app)
+- **Live URL**: [https://smartattendaihome.vercel.app/](https://smartattendaihome.vercel.app/)
 - **Deployment Configuration**: Set `SUPABASE_URL` and `SUPABASE_KEY` under Streamlit Cloud **App Settings -> Secrets**.
 
 ---
