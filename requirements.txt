@@ -5,7 +5,7 @@ scikit-learn   # ML Models
 dlib-bin     # for determining face landmarks
 # python -m pip install dlib-20.0.99-cp313-cp313-win_amd64.whl
 git+https://github.com/ageitgey/face_recognition_models
-setuptools   # for installing dlib
+setuptools>=75   # for installing dlib
 supabase    # for connecting to supabase database
 bcrypt    # for hashing passwords
 segno   # for generating QR codes
