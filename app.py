@@ -31,6 +31,16 @@ def main():
             stroke: #4F46E5 !important;  /* Blue spinner */
         }
 
+        [data-testid="stAudioInput"] label {
+            color: #111827 !important;
+            font-weight: 600 !important;
+            opacity: 1 !important;
+        }
+
+        [data-testid="stAudioInput"] p {
+            color: #111827 !important;
+        }
+        
         </style>
         """, unsafe_allow_html=True)
     
