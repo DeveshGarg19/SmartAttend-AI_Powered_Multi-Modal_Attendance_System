@@ -308,8 +308,10 @@ def teacher_screen_login():
     st.markdown("<h2 style='text-align: center; color: #1E293B; margin-top: 1rem;'>Teacher Login</h2>", unsafe_allow_html=True)
     st.write("")
 
-    teacher_username = st.text_input("Enter username", placeholder='ananyaroy')
-    teacher_pass = st.text_input("Enter password", type='password', placeholder="Enter password")
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Username</p>",unsafe_allow_html=True)
+    teacher_username = st.text_input(label="", placeholder='ananyaroy', label_visibility="collapsed")
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Password</p>",unsafe_allow_html=True)
+    teacher_pass = st.text_input(label="", type='password', placeholder="Enter password", label_visibility="collapsed")
     st.divider()
     btnc1, btnc2 = st.columns(2)
 
@@ -357,13 +359,17 @@ def teacher_screen_register():
     st.markdown("<h2 style='text-align: center; color: #1E293B; margin-top: 1rem;'>Register Teacher Profile</h2>", unsafe_allow_html=True)
     st.write("")
     
-    teacher_username = st.text_input("Enter username", placeholder='ananyaroy')
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Username</p>", unsafe_allow_html=True)
+    teacher_username = st.text_input(label="",placeholder="ananyaroy",label_visibility="collapsed")
 
-    teacher_name = st.text_input("Enter name", placeholder='Ananya Roy')
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Name</p>", unsafe_allow_html=True)
+    teacher_name = st.text_input(label="",placeholder="Ananya Roy",label_visibility="collapsed")
 
-    teacher_pass = st.text_input("Enter password", type='password', placeholder="Enter password")
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Password</p>", unsafe_allow_html=True)
+    teacher_pass = st.text_input(label="",type="password",placeholder="Enter password",label_visibility="collapsed")
 
-    teacher_pass_confirm = st.text_input("Confirm your password", type='password', placeholder="Enter password")
+    st.markdown("<p style='color:black; font-weight:600; margin-bottom:4px;'>Confirm Password</p>", unsafe_allow_html=True)
+    teacher_pass_confirm = st.text_input(label="",type="password",placeholder="Enter password again",label_visibility="collapsed")
 
     st.divider()
 
