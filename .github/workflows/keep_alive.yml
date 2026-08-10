@@ -1,0 +1,13 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'   # pings after every 4 hrs
+  workflow_dispatch:
+
+jobs:
+  ping_job: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP Request to Streamlit
+        run: curl -sI https://smartattendai.streamlit.app/ | head -n 1
